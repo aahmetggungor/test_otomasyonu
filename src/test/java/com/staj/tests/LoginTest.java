@@ -2,13 +2,14 @@ package com.staj.tests;
 
 import com.staj.pages.LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeOptions; // Yeni ekle
-import org.openqa.selenium.remote.RemoteWebDriver; // Yeni ekle
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import java.net.MalformedURLException;
-import java.net.URL; // Yeni ekle
+import java.net.URI; // Yeni eklendi
 
 public class LoginTest {
     WebDriver driver;
@@ -16,10 +17,10 @@ public class LoginTest {
 
     @BeforeMethod
     public void setUp() throws MalformedURLException {
-        // Docker konteynerine bağlanma ayarı
         ChromeOptions options = new ChromeOptions();
-        // Artık Docker'daki adrese bağlanıyoruz
-        driver = new RemoteWebDriver(new URL("http://localhost:4444"), options);
+        
+        // UYARI ÇÖZÜMÜ: new URL() yerine URI.create().toURL() kullanıyoruz
+        driver = new RemoteWebDriver(URI.create("http://localhost:4444").toURL(), options);
         
         driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com/");
@@ -29,16 +30,25 @@ public class LoginTest {
 
     @Test
     public void testSuccessfulLogin() {
+        System.out.println("Test Docker içinde başladı!");
         loginPage.enterUsername("standard_user");
         loginPage.enterPassword("secret_sauce");
         loginPage.clickLogin();
-        // ... (Assertion kısımları aynı kalabilir)
+        System.out.println("Giriş yapıldı, 15 saniye bekliyor...");
     }
 
     @AfterMethod
     public void tearDown() {
+        // Canlı izleyebilmen için kapanmadan önce 15 saniye (15000 milisaniye) bekletiyoruz
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         if (driver != null) {
             driver.quit();
+            System.out.println("Tarayıcı kapatıldı.");
         }
     }
 }
