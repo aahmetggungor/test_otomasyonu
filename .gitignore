@@ -1,0 +1,9 @@
+# Derlenmiş dosyalar
+target/
+*.class
+
+# IDE klasörleri
+.vscode/
+.settings/
+.classpath
+.project
