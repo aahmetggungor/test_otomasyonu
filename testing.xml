@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Staj Otomasyon Suite">
+    <test name="Giris Senaryolari">
+        <classes>
+            <class name="com.staj.tests.LoginTest"/>
+        </classes>
+    </test>
+</suite>
